@@ -5,7 +5,7 @@ import sqlalchemy as sq
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
-
+#token group(вставляем нужный)
 #DB
 Base = declarative_base()
 
