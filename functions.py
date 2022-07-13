@@ -6,7 +6,7 @@ from config import group_token, user_token, V
 from vk_api.exceptions import ApiError
 from db_vk import engine, Base, Session, User, Photos
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
-#token group, user_token(вставляем нужный),V
+
 
 #vk_api
 vk_session = vk_api.VkApi(token = token_group)
