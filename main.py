@@ -47,7 +47,7 @@ def reg_new_user(id_num):
     register_user(id_num)
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     while True:
         msg_text, user_id = bot()
         if msg_text == "Vkinder":
@@ -82,11 +82,11 @@ if _name_ == '_main_':
                 msg_text, user_id = bot()
                 if msg_text == '0':
                     if i >= len(result) - 1:
-                        show_info()
+                        info()
                         break
                     # Пробуем добавить анкету в БД
                     try:
-                        add_user(user_id, result[i][3], result[i][1],
+                        register_user(user_id, result[i][3], result[i][1],
                                  result[i][0], city, result[i][2], current_user_id.id)
 
                     except AttributeError:
