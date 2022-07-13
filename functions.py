@@ -2,13 +2,14 @@ import vk_api
 import json
 import datetime
 from vk_api.longpoll import VkLongPoll, VkEventType
+from config import group_token, user_token, V
 from vk_api.exceptions import ApiError
 from db_vk import engine, Base, Session, User, Photos
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 #token group, user_token(вставляем нужный),V
 
 #vk_api
-vk_session = vk_api.VkApi(token = 'token group')
+vk_session = vk_api.VkApi(token = token_group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
