@@ -6,7 +6,7 @@ from db_vk import engine, Session, write_msg, register_user, add_user_photos, ch
 
 
 #vk_api
-vk_session = vk_api.VkApi(token = 'token group')
+vk_session = vk_api.VkApi(token = token group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
