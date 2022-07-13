@@ -16,7 +16,7 @@ engine = sq.create_engine('postgresql://_user:12345@localhost:5432/db_vkinder', 
 Session = sessionmaker(bind = engine)
 
 #vk_api
-vk_session = vk_api.VkApi(token = 'token_group')
+vk_session = vk_api.VkApi(token = token_group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
