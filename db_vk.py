@@ -13,10 +13,10 @@ Base = declarative_base()
 
 engine = sq.create_engine('postgresql://_user:12345@localhost:5432/db_vkinder', client_encoding='utf8')
 
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(bind=engine)
 
 #vk_api
-vk_session = vk_api.VkApi(token = token_group)
+vk_session = vk_api.VkApi(token=token_group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
@@ -53,7 +53,7 @@ def check_db_master(ids):
 
 
 def msg_send(user_id, message, attachment=None):
-    vk.method ('messages.send',
+    vk_session.method ('messages.send',
               {'user_id': user_id,
                'message': message,
                'random_id': randrange(10 ** 7),
