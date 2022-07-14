@@ -27,7 +27,7 @@ def bot():
 
 
 def menu_bot(id_num):
-    vk.messages.send(id_num,
+    msg_send(id_num,
               f"ПРИВЕТ\n"
               f"\nПройдите регистрацию.\n"
               f"Для регистрации введите - ДА.\n"
@@ -36,14 +36,14 @@ def menu_bot(id_num):
 
 
 def info():
-    vk.messages.send(user_id, f'Это была последняя анкета((.'
+    msg_send(user_id, f'Это была последняя анкета((.'
                        f'Поиск - девушка 18 - 35 Москва'
                        f'Меню бота - Vkinder')
 
 
 def reg_new_user(id_num):
-    vk.messages.send(id_num, 'Вы прошли регистрацию.')
-    vk.messages.send(id_num,
+    msg_send(id_num, 'Вы прошли регистрацию.')
+    msg_send(id_num,
               f"Vkinder - АКТИВАЦИЯ\n")
     register_user(id_num)
 
@@ -64,11 +64,11 @@ if __name__ == '__main__':
                     sex = 2
                 age_at = msg_text[8:10]
                 if int(age_at) < 18:
-                   vk.messages.send(user_id, 'Минимальный возраст - 18 лет.')
+                   msg_send(user_id, 'Минимальный возраст - 18 лет.')
                     age_at = 18
                 age_to = msg_text[11:14]
                 if int(age_to) >= 100:
-                    vk.messages.send(user_id, 'Максимальное значение 99 лет.')
+                    msg_send(user_id, 'Максимальное значение 99 лет.')
                     age_to = 99
                 city = msg_text[14:len(msg_text)].lower()
                 result = search_users(sex, int(age_at), int(age_to), city)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
                 if user_photo == 'нет доступа к фото':
                     continue
 
-                vk.messages.send(user_id, '0 - Далее, \nq - выход из поиска')
+                msg_send(user_id, '0 - Далее, \nq - выход из поиска')
                 msg_text, user_id = bot()
                 if msg_text == '0':
                     if i >= len(result) - 1:
@@ -91,10 +91,10 @@ if __name__ == '__main__':
                                  result[i][0], city, result[i][2], current_user_id.id)
 
                     except AttributeError:
-                        vk.messages.send(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки бота')
+                        msg_send(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки бота')
                         break
 
                 elif msg_text.lower() == 'q':
-                    vk.messages.send(user_id, 'Введите Vkinder для активации бота')
+                    msg_send(user_id, 'Введите Vkinder для активации бота')
                     break
 
