@@ -52,8 +52,8 @@ def check_db_master(ids):
     return current_user_id
 
 
-def vk.messages.send(user_id, message, attachment=None):
-    vk.method('messages.send',
+def msg_send(user_id, message, attachment=None):
+    vk.method ('messages.send',
               {'user_id': user_id,
                'message': message,
                'random_id': randrange(10 ** 7),
@@ -81,11 +81,11 @@ def add_user_photos(event_id, link_photo, id_user):
         )
         session.add(new_user)
         session.commit()
-        vk.messages.send(event_id,
+       msg_send(event_id,
                   'Фото пользователя сохранено ')
         return True
     except (IntegrityError, InvalidRequestError):
-        vk.messages.send(event_id,
+        msg_send(event_id,
                   'Невозможно добавить фото этого пользователя(Уже сохранено)')
         return False
 
