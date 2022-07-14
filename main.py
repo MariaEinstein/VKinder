@@ -2,7 +2,7 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import token_group
 from functions import search_users, get_photo, json_create
-from db_vk import engine, Session, vk.messages.send, register_user, add_user_photos, check_db_master
+from db_vk import engine, Session, msg_send, register_user, add_user_photos, check_db_master
 
 
 
