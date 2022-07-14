@@ -1,6 +1,6 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-from config import group_token
+from config import token_group
 from random import randrange
 import sqlalchemy as sq
 from sqlalchemy.ext.declarative import declarative_base
