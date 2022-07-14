@@ -81,7 +81,7 @@ def add_user_photos(event_id, link_photo, id_user):
         )
         session.add(new_user)
         session.commit()
-       msg_send(event_id,
+        msg_send(event_id,
                   'Фото пользователя сохранено ')
         return True
     except (IntegrityError, InvalidRequestError):
@@ -92,5 +92,3 @@ def add_user_photos(event_id, link_photo, id_user):
 
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
-
-
