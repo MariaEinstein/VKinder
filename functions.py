@@ -2,7 +2,7 @@ import vk_api
 import json
 import datetime
 from vk_api.longpoll import VkLongPoll, VkEventType
-from config import group_token, user_token, V
+from config import token_group, token_user, V
 from vk_api.exceptions import ApiError
 from db_vk import engine, Base, Session, User, Photos
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
@@ -24,7 +24,7 @@ connection = engine.connect()
 def search_users(sex, age_at, age_to, city):
     all_persons = []
     link_profile = 'https://vk.com/id'
-    vk_ = vk_api.VkApi(token=user_token)
+    vk_ = vk_api.VkApi(token=token_user)
     response = vk_.method('users.search',
                           {'sort': 1,
                            'sex': sex,
