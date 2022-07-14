@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 
 #vk_api
-vk_session = vk_api.VkApi(token = token_group)
+vk_session = vk_api.VkApi(token=token_group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
@@ -49,11 +49,11 @@ def search_users(sex, age_at, age_to, city):
 
 #photo
 def get_photo(user_owner_id):
-    vk_ = vk_api.VkApi(token=user_token)
+    vk_ = vk_api.VkApi(token=token_user)
     try:
         response = vk_.method('photos.get',
                               {
-                                  'access_token': user_token,
+                                  'access_token': 'user_token',
                                   'v': V,
                                   'owner_id': user_owner_id,
                                   'album_id': 'profile',
