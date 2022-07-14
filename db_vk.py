@@ -54,10 +54,10 @@ def check_db_master(ids):
 
 def msg_send(user_id, message, attachment=None):
     vk_session.method ('messages.send',
-              {'user_id': user_id,
-               'message': message,
-               'random_id': randrange(10 ** 7),
-               'attachment': attachment})
+        {'user_id': user_id,
+        'message': message,
+        'random_id': randrange(10 ** 7),
+        'attachment': attachment})
 
 
 def register_user(vk_id):
