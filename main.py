@@ -2,12 +2,12 @@ import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import token_group
 from functions import search_users, get_photo, json_create
-from db_vk import engine, Session, msg_send, register_user, add_user_photos, check_db_master
+from db_vk import engine, Session, msg_send, register_user, check_db_master
 
 
 
 #vk_api
-vk_session = vk_api.VkApi(token = token_group)
+vk_session = vk_api.VkApi(token=token_group)
 longpoll = VkLongPoll(vk_session)
 vk = vk_session.get_api()
 
@@ -64,8 +64,8 @@ if __name__ == '__main__':
                     sex = 2
                 age_at = msg_text[8:10]
                 if int(age_at) < 18:
-                   msg_send(user_id, 'Минимальный возраст - 18 лет.')
-                    age_at = 18
+                    msg_send(user_id, 'Минимальный возраст - 18 лет.')
+                age_at = 18
                 age_to = msg_text[11:14]
                 if int(age_to) >= 100:
                     msg_send(user_id, 'Максимальное значение 99 лет.')
@@ -74,6 +74,9 @@ if __name__ == '__main__':
                 result = search_users(sex, int(age_at), int(age_to), city)
                 json_create(result)
                 current_user_id = check_db_master(user_id)
+
+                for i in range(len(result)):
+                    user = check_db_master(result[i][3])
 
                 user_photo = get_photo(result[i][3])
                 if user_photo == 'нет доступа к фото':
