@@ -29,7 +29,7 @@ class User(Base):
     vk_id = sq.Column(sq.Integer, unique=True)
 
 
-# Анкеты добавленные в избранное
+
 class DatingUser(Base):
     __tablename__ = 'dating_user'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
@@ -41,7 +41,7 @@ class DatingUser(Base):
     id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
 
 
-# Фото избранных анкет
+
 class Photos(Base):
     __tablename__ = 'photos'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
