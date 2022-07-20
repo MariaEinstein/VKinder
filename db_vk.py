@@ -7,45 +7,50 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
-
-#DB
+# DB
 Base = declarative_base()
 
-engine = sq.create_engine('postgresql://_user:12345@localhost:5432/db_vkinder', client_encoding='utf8')
+engine = sq.create_engine('postgresql://_user:12345@localhost/db_vkinder', client_encoding='utf8')
 
 Session = sessionmaker(bind=engine)
 
-#vk_api
-vk_session = vk_api.VkApi(token=token_group)
-longpoll = VkLongPoll(vk_session)
-vk = vk_session.get_api()
+# vk_api
+vk = vk_api.VkApi(token=token_group)
+longpoll = VkLongPoll(vk)
 
-
-#DB
+# DB
 session = Session()
 connection = engine.connect()
-
 
 
 class User(Base):
     __tablename__ = 'user'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
-    first_name = sq.Column(sq.String)
-    last_name = sq.Column(sq.String)
-    city = sq.Column(sq.String)
-    link = sq.Column(sq.String)
     vk_id = sq.Column(sq.Integer, unique=True)
 
 
+# Анкеты добавленные в избранное
+class DatingUser(Base):
+    __tablename__ = 'dating_user'
+    id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
+    vk_id = sq.Column(sq.Integer, unique=True)
+    first_name = sq.Column(sq.String)
+    second_name = sq.Column(sq.String)
+    city = sq.Column(sq.String)
+    link = sq.Column(sq.String)
+    id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
+
+
+# Фото избранных анкет
 class Photos(Base):
     __tablename__ = 'photos'
     id = sq.Column(sq.Integer, primary_key=True, autoincrement=True)
     link_photo = sq.Column(sq.String)
-    id_user = sq.Column(sq.Integer, sq.ForeignKey('user.id', ondelete='CASCADE'))
+    count_likes = sq.Column(sq.Integer)
+    id_dating_user = sq.Column(sq.Integer, sq.ForeignKey('dating_user.id', ondelete='CASCADE'))
 
 
-
-#functions DB
+# functions DB
 
 def check_db_master(ids):
     current_user_id = session.query(User).filter_by(vk_id=ids).first()
@@ -53,12 +58,18 @@ def check_db_master(ids):
 
 
 def msg_send(user_id, message, attachment=None):
-    vk_session.method ('messages.send',
-        {'user_id': user_id,
-        'message': message,
-        'random_id': randrange(10 ** 7),
-        'attachment': attachment})
+    vk.method('messages.send',
+              {'user_id': user_id,
+               'message': message,
+               'random_id': randrange(10 ** 7),
+               'attachment': attachment})
 
+
+
+def check_db_user(ids):
+    dating_user = session.query(DatingUser).filter_by(
+        vk_id=ids).first()
+    return dating_user
 
 def register_user(vk_id):
     try:
@@ -72,7 +83,6 @@ def register_user(vk_id):
         return False
 
 
-
 def add_user_photos(event_id, link_photo, id_user):
     try:
         new_user = Photos(
@@ -82,11 +92,11 @@ def add_user_photos(event_id, link_photo, id_user):
         session.add(new_user)
         session.commit()
         msg_send(event_id,
-                  'Фото пользователя сохранено ')
+                 'Фото пользователя сохранено ')
         return True
     except (IntegrityError, InvalidRequestError):
         msg_send(event_id,
-                  'Невозможно добавить фото этого пользователя(Уже сохранено)')
+                 'Невозможно добавить фото этого пользователя(Уже сохранено)')
         return False
 
 
