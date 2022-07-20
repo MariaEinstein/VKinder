@@ -1,21 +1,17 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import token_group
-from functions import search_users, get_photo, json_create
-from db_vk import engine, Session, msg_send, register_user, check_db_master
+from functions import search_users, get_photo, json_create, sort_likes
+from db_vk import engine, Session, msg_send, register_user, check_db_master, check_db_user
+
+# vk_api
+vk = vk_api.VkApi(token=token_group)
+longpoll = VkLongPoll(vk)
 
 
-
-#vk_api
-vk_session = vk_api.VkApi(token=token_group)
-longpoll = VkLongPoll(vk_session)
-vk = vk_session.get_api()
-
-
-#DB
+# DB
 session = Session()
 connection = engine.connect()
-
 
 
 def bot():
@@ -28,23 +24,23 @@ def bot():
 
 def menu_bot(id_num):
     msg_send(id_num,
-              f"ПРИВЕТ\n"
-              f"\nПройдите регистрацию.\n"
-              f"Для регистрации введите - ДА.\n"
-              f"\nУже зарегистрированны?! - начинайте поиск!\n"
-              f"Для поиска - девушка 18-25, Екатеринбург\n")
+             f"ПРИВЕТ\n"
+             f"\nПройдите регистрацию.\n"
+             f"Для регистрации введите - ДА.\n"
+             f"\nУже зарегистрированны?! - начинайте поиск!\n"
+             f"Для поиска - девушка 18-25 Москва\n")
 
 
 def info():
     msg_send(user_id, f'Это была последняя анкета((.'
-                       f'Поиск - девушка 18 - 35 Москва'
-                       f'Меню бота - Vkinder')
+                      f'Поиск - девушка 18 - 25 Москва'
+                      f'Меню бота - Vkinder')
 
 
 def reg_new_user(id_num):
     msg_send(id_num, 'Вы прошли регистрацию.')
     msg_send(id_num,
-              f"Vkinder - АКТИВАЦИЯ\n")
+             f"Vkinder - АКТИВАЦИЯ\n")
     register_user(id_num)
 
 
@@ -58,7 +54,7 @@ if __name__ == '__main__':
                 reg_new_user(user_id)
             elif len(msg_text) > 1:
                 sex = 0
-                if msg_text[0:7].lower() =='девушка':
+                if msg_text[0:7].lower() == 'девушка':
                     sex = 1
                 elif msg_text[0:7].lower() == 'мужчина':
                     sex = 2
@@ -76,12 +72,23 @@ if __name__ == '__main__':
                 current_user_id = check_db_master(user_id)
 
                 for i in range(len(result)):
-                    user = check_db_master(result[i][3])
+                    dating_user = check_db_user(result[i][3])
 
                 user_photo = get_photo(result[i][3])
                 if user_photo == 'нет доступа к фото':
                     continue
-
+                sorted_user_photo = sort_likes(user_photo)
+                # Выводим отсортированные данные по анкетам
+                msg_send(user_id, f'\n{result[i][0]}  {result[i][1]}  {result[i][2]}', )
+                try:
+                    msg_send(user_id, f'фото:',
+                             attachment=','.join
+                             ([sorted_user_photo[-1][1], sorted_user_photo[-2][1],
+                               sorted_user_photo[-3][1]]))
+                except IndexError:
+                    for photo in range(len(sorted_user_photo)):
+                        msg_send(user_id, f'фото:',
+                                 attachment=sorted_user_photo[photo][1])
                 msg_send(user_id, '0 - Далее, \nq - выход из поиска')
                 msg_text, user_id = bot()
                 if msg_text == '0':
@@ -91,7 +98,7 @@ if __name__ == '__main__':
                     # Пробуем добавить анкету в БД
                     try:
                         register_user(user_id, result[i][3], result[i][1],
-                                 result[i][0], city, result[i][2], current_user_id.id)
+                                      result[i][0], city, result[i][2], current_user_id.id)
 
                     except AttributeError:
                         msg_send(user_id, 'Вы не зарегистрировались!\n Введите Vkinder для перезагрузки бота')
