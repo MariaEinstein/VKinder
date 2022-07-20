@@ -7,19 +7,17 @@ from vk_api.exceptions import ApiError
 from db_vk import engine, Base, Session, User, Photos
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
-
-#vk_api
-vk_session = vk_api.VkApi(token=token_group)
-longpoll = VkLongPoll(vk_session)
-vk = vk_session.get_api()
+# vk_api
+vk = vk_api.VkApi(token=token_group)
+longpoll = VkLongPoll(vk)
 
 
-
-#DB
+# DB
 session = Session()
 connection = engine.connect()
 
-#search
+
+# search
 
 def search_users(sex, age_at, age_to, city):
     all_persons = []
@@ -47,7 +45,7 @@ def search_users(sex, age_at, age_to, city):
     return all_persons
 
 
-#photo
+# photo
 def get_photo(user_owner_id):
     vk_ = vk_api.VkApi(token=token_user)
     try:
@@ -67,14 +65,22 @@ def get_photo(user_owner_id):
     for i in range(10):
         try:
             users_photos.append(
-                [response['items'][i]['count'],
+                [response['items'][i]['likes']['count'],
                  'photo' + str(response['items'][i]['owner_id']) + '_' + str(response['items'][i]['id'])])
         except IndexError:
             users_photos.append(['нет фото.'])
     return users_photos
 
 
-#json
+def sort_likes(photos):
+    result = []
+    for element in photos:
+        if element != ['нет фото.'] and photos != 'нет доступа к фото':
+            result.append(element)
+    return sorted(result)
+
+
+# json
 
 def json_create(lst):
     today = datetime.date.today()
