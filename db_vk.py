@@ -18,7 +18,7 @@ Session = sessionmaker(bind=engine)
 vk = vk_api.VkApi(token=token_group)
 longpoll = VkLongPoll(vk)
 
-# DB
+
 session = Session()
 connection = engine.connect()
 
