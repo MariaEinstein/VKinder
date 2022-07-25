@@ -11,18 +11,18 @@ connection = psycopg2.connect(
 connection.autocommit = True
 
 
-def create_table_users():
-    """СОЗДАНИЕ ТАБЛИЦЫ USERS НАЙДЕННЫЕ ПОЛЬЗОВАТЕЛИ"""
+def create_table_user():
+    """СОЗДАНИЕ ТАБЛИЦЫ USER НАЙДЕННЫЕ ПОЛЬЗОВАТЕЛИ"""
     with connection.cursor() as cursor:
         cursor.execute(
-            """CREATE TABLE IF NOT EXISTS users(
+            """CREATE TABLE IF NOT EXISTS user(
                 id serial,
                 first_name varchar(50) NOT NULL,
                 last_name varchar(25) NOT NULL,
                 vk_id varchar(20) NOT NULL PRIMARY KEY,
                 vk_link varchar(50));"""
         )
-    print("[INFO] Table USERS was created.")
+    print("[INFO] Table USER was created.")
 
 
 def create_table_seen_users():  # references users(vk_id)
@@ -36,11 +36,11 @@ def create_table_seen_users():  # references users(vk_id)
     print("[INFO] Table SEEN_USERS was created.")
 
 
-def insert_data_users(first_name, last_name, vk_id, vk_link):
-    """ВСТАВКА ДАННЫХ В ТАБЛИЦУ USERS"""
+def insert_data_user(first_name, last_name, vk_id, vk_link):
+    """ВСТАВКА ДАННЫХ В ТАБЛИЦУ USER"""
     with connection.cursor() as cursor:
         cursor.execute(
-            f"""INSERT INTO users (first_name, last_name, vk_id, vk_link) 
+            f"""INSERT INTO user (first_name, last_name, vk_id, vk_link) 
             VALUES ('{first_name}', '{last_name}', '{vk_id}', '{vk_link}');"""
         )
 
@@ -64,7 +64,7 @@ def select(offset):
                         u.vk_id,
                         u.vk_link,
                         su.vk_id
-                        FROM users AS u
+                        FROM user AS u
                         LEFT JOIN seen_users AS su 
                         ON u.vk_id = su.vk_id
                         WHERE su.vk_id IS NULL
@@ -73,13 +73,13 @@ def select(offset):
         return cursor.fetchone()
 
 
-def drop_users():
-    """УДАЛЕНИЕ ТАБЛИЦЫ USERS КАСКАДОМ"""
+def drop_user():
+    """УДАЛЕНИЕ ТАБЛИЦЫ USER КАСКАДОМ"""
     with connection.cursor() as cursor:
         cursor.execute(
-            """DROP TABLE IF EXISTS users CASCADE;"""
+            """DROP TABLE IF EXISTS user CASCADE;"""
         )
-        print('[INFO] Table USERS was deleted.')
+        print('[INFO] Table USER was deleted.')
 
 
 def drop_seen_users():
@@ -92,7 +92,7 @@ def drop_seen_users():
 
 
 def creating_database():
-    drop_users()
+    drop_user()
     drop_seen_users()
-    create_table_users()
+    create_table_user()
     create_table_seen_users()
