@@ -6,5 +6,5 @@ line = range(0, 1000)
 
 host = 'localhost'  # адрес БД
 user = 'postgres'  # логин БД
-password = '1111'  # пароль БД
+password = ''  # пароль БД
 db_name = 'vkinder'  # имя БД
