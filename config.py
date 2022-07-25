@@ -1,5 +1,5 @@
 user_token = ''  # токен пользователя
-comm_token = ''  # токен сообщества
+group_token = ''  # токен группы
 
 offset = 0
 line = range(0, 1000)
