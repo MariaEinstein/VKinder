@@ -1,4 +1,4 @@
-from config import user_token, comm_token, offset, line
+from config import user_token, group_token, offset, line
 import vk_api
 import requests
 import datetime
@@ -10,7 +10,7 @@ from database import *
 class VKBot:
     def __init__(self):
         print('Bot was created')
-        self.vk = vk_api.VkApi(token=comm_token)  # АВТОРИЗАЦИЯ СООБЩЕСТВА
+        self.vk = vk_api.VkApi(token=group_token)  # АВТОРИЗАЦИЯ ГРУППЫ
         self.longpoll = VkLongPoll(self.vk)  # РАБОТА С СООБЩЕНИЯМИ
 
     def write_msg(self, user_id, message):
